@@ -17,6 +17,9 @@ class MuseumTest < MiniTest::Test
 
     assert_equal "Denver Museum of Nature and Science", dmns.name
     assert_equal [], dmns.exhibits
+    assert_equal [], dmns.patrons
+    assert_equal 0, dmns.revenue
+    assert_instance_of Hash, dmns.patrons_of_exhibits
   end
 
   def test_it_can_add_exhibits
