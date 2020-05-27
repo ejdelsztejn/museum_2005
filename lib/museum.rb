@@ -39,4 +39,14 @@ class Museum
     end
     patrons_by_exhibit
   end
+
+  def ticket_lottery_contestants
+    lottery_contestants = []
+    patrons.each do |patron|
+      recommend_exhibits(patron).each do |exhibit|
+        lottery_contestants << patron if exhibit.cost > patron.spending_money
+      end
+    end
+    lottery_contestants
+  end
 end
