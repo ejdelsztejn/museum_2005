@@ -1,5 +1,6 @@
 require 'minitest/autorun'
 require 'minitest/pride'
+require 'mocha/minitest'
 require './lib/patron'
 require './lib/exhibit'
 require './lib/museum'
@@ -147,7 +148,50 @@ class MuseumTest < MiniTest::Test
     dmns.admit(patron_2)
     dmns.admit(patron_3)
 
+    dmns.stubs(:draw_lottery_winner).returns("Bob has won the IMAX edhibit lottery")
     assert_equal [patron_1, patron_3], dmns.ticket_lottery_contestants(dead_sea_scrolls)
-    assert_instance_of Patron, dmns.draw_lottery_winner(dead_sea_scrolls)
+    assert_equal "Bob has won the IMAX edhibit lottery", dmns.draw_lottery_winner(dead_sea_scrolls)
+  end
+
+  def test_patrons_can_attend_exhibits
+    dmns = Museum.new("Denver Museum of Nature and Science")
+    gems_and_minerals = Exhibit.new({name: "Gems and Minerals", cost: 0})
+    dead_sea_scrolls = Exhibit.new({name: "Dead Sea Scrolls", cost: 10})
+    imax = Exhibit.new({name: "IMAX",cost: 15})
+
+    dmns.add_exhibit(gems_and_minerals)
+    dmns.add_exhibit(dead_sea_scrolls)
+    dmns.add_exhibit(imax)
+
+    tj = Patron.new("TJ", 7)
+    tj.add_interest("IMAX")
+    tj.add_interest("Dead Sea Scrolls")
+    dmns.admit(tj)
+
+    assert_equal 7, tj.spending_money
+
+    patron_1 = Patron.new("Bob", 10)
+    patron_1.add_interest("Dead Sea Scrolls")
+    patron_1.add_interest("IMAX")
+    dmns.admit(patron_1)
+
+    assert_equal 0, patron_1.spending_money
+
+    patron_2 = Patron.new("Sally", 20)
+    patron_2.add_interest("IMAX")
+    patron_2.add_interest("Dead Sea Scrolls")
+    dmns.admit(patron_2)
+
+    assert_equal 5, patron_2.spending_money
+
+    morgan = Patron.new("Morgan", 15)
+    morgan.add_interest("Gems and Minerals")
+    morgan.add_interest("Dead Sea Scrolls")
+    dmns.admit(morgan)
+
+    assert_equal 5, morgan.spending_money
+
+    # add patrons to exhibit hash
+    assert_equal 35, dmns.revenue
   end
 end
