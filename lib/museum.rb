@@ -7,6 +7,7 @@ class Museum
     @name = name
     @exhibits = []
     @patrons = []
+    @revenue = 0
   end
 
   def add_exhibit(exhibit)
@@ -25,6 +26,19 @@ class Museum
 
   def admit(patron)
     @patrons << patron
+    attend_exhibits(patron)
+  end
+
+  def attend_exhibits(patron)
+    sorted_exhibits = recommend_exhibits(patron).sort {|a, b| b.cost <=> a.cost }
+    sorted_exhibits.each do |exhibit|
+      if patron.spending_money >= exhibit.cost
+        @revenue += exhibit.cost
+        patron.spend_money(exhibit.cost)
+      else
+        next
+      end
+    end
   end
 
   def patrons_by_exhibit_interest
