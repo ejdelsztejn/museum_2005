@@ -119,7 +119,7 @@ class MuseumTest < MiniTest::Test
     dmns.admit(patron_2)
     dmns.admit(patron_3)
 
-    assert_equal [patron_1, patron_3], dmns.ticket_lottery_contestants
+    assert_equal [patron_1, patron_3], dmns.ticket_lottery_contestants(dead_sea_scrolls)
   end
 
   def test_it_can_draw_lottery_winner
@@ -131,6 +131,9 @@ class MuseumTest < MiniTest::Test
     dmns.add_exhibit(gems_and_minerals)
     dmns.add_exhibit(dead_sea_scrolls)
     dmns.add_exhibit(imax)
+
+    assert_nil nil, dmns.ticket_lottery_contestants(dead_sea_scrolls)
+    assert_equal "No winners for this lottery", dmns.draw_lottery_winner(dead_sea_scrolls)
 
     patron_1 = Patron.new("Bob", 0)
     patron_1.add_interest("Dead Sea Scrolls")
@@ -144,7 +147,7 @@ class MuseumTest < MiniTest::Test
     dmns.admit(patron_2)
     dmns.admit(patron_3)
 
-    assert_equal [patron_1, patron_3], dmns.ticket_lottery_contestants
-    assert_instance_of Patron, dmns.draw_lottery_winner
+    assert_equal [patron_1, patron_3], dmns.ticket_lottery_contestants(dead_sea_scrolls)
+    assert_instance_of Patron, dmns.draw_lottery_winner(dead_sea_scrolls)
   end
 end
