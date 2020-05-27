@@ -49,4 +49,8 @@ class Museum
     end
     lottery_contestants
   end
+
+  def draw_lottery_winner
+    ticket_lottery_contestants.sample
+  end
 end
