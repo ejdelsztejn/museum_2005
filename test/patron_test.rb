@@ -27,4 +27,14 @@ class PatronTest < MiniTest::Test
 
     assert_equal ["Dead Sea Scrolls", "Gems and Minerals"], patron_1.interests
   end
+
+  def test_it_can_spend_money
+    patron_1 = Patron.new("Bob", 20)
+
+    assert_equal 20, patron_1.spending_money
+
+    patron_1.spend_money(10)
+
+    assert_equal 10, patron_1.spending_money
+  end
 end
