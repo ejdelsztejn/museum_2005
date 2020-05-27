@@ -14,6 +14,6 @@ class Patron
   end
 
   def spend_money(amount)
-    spending_money -= amount
+    @spending_money -= amount
   end
 end

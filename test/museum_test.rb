@@ -192,6 +192,12 @@ class MuseumTest < MiniTest::Test
     assert_equal 5, morgan.spending_money
 
     # add patrons to exhibit hash
+    assert_equal ({
+      dead_sea_scrolls => [patron_1, morgan],
+      imax => [patron_2],
+      gems_and_minerals => [morgan]
+    }), dmns.patrons_of_exhibits
+
     assert_equal 35, dmns.revenue
   end
 end
